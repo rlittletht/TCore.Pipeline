@@ -108,12 +108,12 @@ namespace TCore.Pipeline
         private Consumer<T> m_cons;
         private Thread m_threadConsumer;
 
-        public ProducerConsumer(WriteHookDelegate hook = null)
+        public ProducerConsumer(WriteHookDelegate hook = null, Consumer<T>.ProcessRecordDelegate recordDelegate = null)
         {
             m_sld = new SharedListenData<T>(hook);
 
             m_prod = new Producer<T>(m_sld);
-            m_cons = new Consumer<T>(m_sld, null);
+            m_cons = new Consumer<T>(m_sld, recordDelegate);
         }
 
         public Producer<T> Producer => m_prod;
