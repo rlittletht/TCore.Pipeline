@@ -127,7 +127,7 @@ namespace TCore.Pipeline
                 m_threadConsumer.Suspend();
         }
 
-        public void TestResumeThread()
+        public void TestResumeConsumerThread()
         {
             if (m_cSuspendedThread == 0)
                 throw new Exception("poorly nested suspend");
