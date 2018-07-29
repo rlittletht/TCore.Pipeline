@@ -7,11 +7,15 @@ namespace TCore.Pipeline
 {
     public class Consumer<T> where T : IPipelineBase<T>, new()
     {
-        private SharedListenData<T> m_sld;
+        public delegate void ProcessRecordDelegate(T t);
 
-        public Consumer(SharedListenData<T> sld)
+        private SharedListenData<T> m_sld;
+        private ProcessRecordDelegate m_processRecord;
+
+        public Consumer(SharedListenData<T> sld, ProcessRecordDelegate processRecord)
         {
             m_sld = sld;
+            m_processRecord = processRecord;
         }
 
         void ProcessPendingRecords()
@@ -20,7 +24,14 @@ namespace TCore.Pipeline
 
             m_sld.HookLog($"grabbed {plt.Count} records...");
             foreach (T t in plt)
+            {
                 m_sld.HookListen(t);
+
+                // at this point we have to actually do something. call the delegate to do
+                // this
+                if (m_processRecord != null)
+                    m_processRecord(t);
+            }
         }
 
         public void Listen()

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace TCore.Pipeline
 {
     public delegate void WriteHookDelegate(string sMessage);
-
     public class ProducerConsumer
     {
 
@@ -114,7 +113,7 @@ namespace TCore.Pipeline
             m_sld = new SharedListenData<T>(hook);
 
             m_prod = new Producer<T>(m_sld);
-            m_cons = new Consumer<T>(m_sld);
+            m_cons = new Consumer<T>(m_sld, null);
         }
 
         public Producer<T> Producer => m_prod;
