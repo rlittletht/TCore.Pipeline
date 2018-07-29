@@ -117,6 +117,9 @@ namespace TCore.Pipeline
             m_cons = new Consumer<T>(m_sld);
         }
 
+        public Producer<T> Producer => m_prod;
+        public Consumer<T> Consumer => m_cons;
+
         private int m_cSuspendedThread;
 
         public void TestSuspendConsumerThread()

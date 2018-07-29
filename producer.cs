@@ -14,7 +14,7 @@ namespace TCore.Pipeline
             m_sld = sld;
         }
 
-        public void RecordEvent(T t)
+        public void QueueRecord(T t)
         {
             m_sld.AddListenRecord(t);
         }
