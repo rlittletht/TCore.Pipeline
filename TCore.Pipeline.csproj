@@ -4,6 +4,9 @@
       <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="PipeRef\**" />
+    <EmbeddedResource Remove="PipeRef\**" />
+    <None Remove="PipeRef\**" />
   </ItemGroup>
   <PropertyGroup>
     <ProjectGuid>{34863620-1EE0-457B-904B-8744D495D2F5}</ProjectGuid>

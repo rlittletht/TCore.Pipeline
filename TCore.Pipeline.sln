@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCore.Pipeline", "TCore.Pipeline.csproj", "{34863620-1EE0-457B-904B-8744D495D2F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCore.Pipeline", "TCore.Pipeline.csproj", "{34863620-1EE0-457B-904B-8744D495D2F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipeRef", "PipeRef\PipeRef.csproj", "{B203501D-0A76-46DA-8468-EFDFFEBCA334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{34863620-1EE0-457B-904B-8744D495D2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34863620-1EE0-457B-904B-8744D495D2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34863620-1EE0-457B-904B-8744D495D2F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B203501D-0A76-46DA-8468-EFDFFEBCA334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B203501D-0A76-46DA-8468-EFDFFEBCA334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B203501D-0A76-46DA-8468-EFDFFEBCA334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B203501D-0A76-46DA-8468-EFDFFEBCA334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

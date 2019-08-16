@@ -5,6 +5,7 @@ using System.Threading;
 namespace TCore.Pipeline
 {
     public delegate void WriteHookDelegate(string sMessage);
+
     public class ProducerConsumer
     {
 
