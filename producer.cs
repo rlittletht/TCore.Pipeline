@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using TCore.Pipeline;
-
+﻿
 namespace TCore.Pipeline
 {
     public class Producer<T> where T: IPipelineBase<T>, new()
