@@ -19,6 +19,7 @@
     <PackageLicenseUrl>https://github.com/rlittletht/TCore.Pipeline/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/rlittletht/TCore.Pipeline</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
