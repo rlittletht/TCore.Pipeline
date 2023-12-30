@@ -119,12 +119,14 @@ namespace TCore.Pipeline
 
         private int m_cSuspendedThread;
 
+        [Obsolete]
         public void TestSuspendConsumerThread()
         {
             if (++m_cSuspendedThread == 1)
                 m_threadConsumer.Suspend();
         }
 
+        [Obsolete]
         public void TestResumeConsumerThread()
         {
             if (m_cSuspendedThread == 0)
