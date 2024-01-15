@@ -29,7 +29,9 @@ namespace TCore.Pipeline
             while (!m_sld.IsDone())
             {
                 m_sld.WaitForEventSignal();
+                m_sld.SignalThreadWorking();
                 ProcessPendingRecords();
+                m_sld.SignalThreadWorkerComplete();
             }
         }
     }

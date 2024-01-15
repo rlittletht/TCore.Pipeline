@@ -23,6 +23,9 @@ namespace TCore.Pipeline
         private bool m_fDone;
         private Object m_oLock;
         private AutoResetEvent m_evt;
+
+        // this starts in the signaled state because the worker isn't processing records
+        private ManualResetEvent m_evtThreadWorking = new ManualResetEvent(true);
         private WriteHookDelegate m_hook;
 
         public SharedListenData(WriteHookDelegate hook)
@@ -63,11 +66,30 @@ namespace TCore.Pipeline
                 m_fDone = true;
                 m_evt.Set();
             }
+            // outside the lock, wait for workers to finish
+            m_evtThreadWorking.WaitOne();
         }
 
         public void WaitForEventSignal()
         {
             m_evt.WaitOne();
+        }
+
+        /*----------------------------------------------------------------------------
+            %%Function: SignalThreadWorking
+            %%Qualified: TCore.Pipeline.SharedListenData<T>.SignalThreadWorking
+
+            This resets the event for thread working. This means TerminateListener
+            will wait for this event to be set before returning
+        ----------------------------------------------------------------------------*/
+        public void SignalThreadWorking()
+        {
+            m_evtThreadWorking.Reset();
+        }
+
+        public void SignalThreadWorkerComplete()
+        {
+            m_evtThreadWorking.Set();
         }
 
         public bool IsDone()
