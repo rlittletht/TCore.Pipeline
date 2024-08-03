@@ -43,16 +43,16 @@ namespace PipeRef
         }
 
         private WorkCost[] m_costs = new[]
-        {
-            new WorkCost("None", 0),
-            new WorkCost("1 ms", 1),
-            new WorkCost("5 ms", 5),
-            new WorkCost("10 ms", 10),
-            new WorkCost("100 ms", 100),
-            new WorkCost("1 s", 1000),
-            new WorkCost("5 s", 5000),
-            new WorkCost("10 s", 10000)
-        };
+                                     {
+                                         new WorkCost("None", 0),
+                                         new WorkCost("1 ms", 1),
+                                         new WorkCost("5 ms", 5),
+                                         new WorkCost("10 ms", 10),
+                                         new WorkCost("100 ms", 100),
+                                         new WorkCost("1 s", 1000),
+                                         new WorkCost("5 s", 5000),
+                                         new WorkCost("10 s", 10000)
+                                     };
 
         public PipeRef()
         {
@@ -76,7 +76,7 @@ namespace PipeRef
 
         private void DoAdd1(object sender, EventArgs e)
         {
-            WorkItem work = new WorkItem(m_workId++, m_msecCost);
+            WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked);
             Log($"{DateTime.Now}: Adding WorkId({work.WorkId})");
             pipeline.Producer.QueueRecord(work);
         }
@@ -85,7 +85,7 @@ namespace PipeRef
         {
             for (int i = 0; i < 5; i++)
             {
-                WorkItem work = new WorkItem(m_workId++, m_msecCost);
+                WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked);
                 Log($"{DateTime.Now}: Adding WorkId({work.WorkId})");
                 pipeline.Producer.QueueRecord(work);
             }
@@ -96,6 +96,18 @@ namespace PipeRef
         private void DoChangeWorkCost(object sender, EventArgs e)
         {
             m_msecCost = ((WorkCost)m_cbxCost.SelectedItem).WorkMsecCost;
+        }
+
+        private void DoTerminatePipeline(object sender, EventArgs e)
+        {
+            Log($"{DateTime.Now}: Requesting terminate...");
+
+            ThreadPool.QueueUserWorkItem(
+                (_) =>
+                {
+                    pipeline.Stop();
+                    Application.Exit();
+                });
         }
     }
 }

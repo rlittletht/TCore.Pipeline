@@ -24,16 +24,19 @@ namespace PipeRef
         {
             public int WorkId { get; set; }
             public int Cost { get; set; }
+            public bool AbortQueueSupported { get; set; }
+
             private Stopwatch m_sw;
 
             public WorkItem()
             {
             }
 
-            public WorkItem(int workId, int cost)
+            public WorkItem(int workId, int cost, bool abortQueueSupported)
             {
                 WorkId = workId;
                 Cost = cost;
+                AbortQueueSupported = abortQueueSupported;
                 m_sw = new Stopwatch();
                 m_sw.Start();
             }
@@ -44,6 +47,7 @@ namespace PipeRef
                 item.m_sw = null;
                 WorkId = item.WorkId;
                 Cost = item.Cost;
+                AbortQueueSupported = item.AbortQueueSupported;
             }
 
             public static string FormatTimeParts(long secs, long ms, long micro)
@@ -129,12 +133,18 @@ namespace PipeRef
         // on the background thread. This will get an enumerable set of items.
         // This is happening on the background thread as we pull item(s)
         // off the queue
-        void ProcessWorkItems(IEnumerable<WorkItem> workItems)
+        void ProcessWorkItems(IEnumerable<WorkItem> workItems, Consumer<WorkItem>.ShouldAbortDelegate shouldAbort)
         {
             Log($"{DateTime.Now}: Processing workItems");
 
             foreach (WorkItem workItem in workItems)
             {
+                if (workItem.AbortQueueSupported && shouldAbort())
+                {
+                    Log($"{DateTime.Now}: Abort requested, wait time {workItem.Elapsed()}");
+                    return;
+                }
+
                 Log($"{DateTime.Now}: Starting processing for {workItem.WorkId}, wait time {workItem.Elapsed()}");
                 if (workItem.Cost != 0)
                     Thread.Sleep(workItem.Cost);

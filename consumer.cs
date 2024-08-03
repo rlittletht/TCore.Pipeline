@@ -4,7 +4,8 @@ namespace TCore.Pipeline
 {
     public class Consumer<T> where T : IPipelineBase<T>, new()
     {
-        public delegate void ProcessRecordDelegate(IEnumerable<T> t);
+        public delegate bool ShouldAbortDelegate();
+        public delegate void ProcessRecordDelegate(IEnumerable<T> t, ShouldAbortDelegate shouldAbort);
 
         private SharedListenData<T> m_sld;
         private ProcessRecordDelegate m_processRecord;
@@ -15,13 +16,18 @@ namespace TCore.Pipeline
             m_processRecord = processRecord;
         }
 
+        bool ShouldAbort()
+        {
+            return m_sld.IsDone();
+        }
+
         void ProcessPendingRecords()
         {
             List<T> plt = m_sld.GrabListenRecords();
 
             m_sld.HookLog($"grabbed {plt.Count} records...");
             if (m_processRecord != null)
-                m_processRecord(plt);
+                m_processRecord(plt, ShouldAbort);
         }
 
         public void Listen()
