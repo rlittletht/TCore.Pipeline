@@ -30,7 +30,7 @@ namespace TCore.Pipeline
                 m_sld.HookLog($"nothing to grab...");
                 return;
             }
-            
+
             m_sld.HookLog($"grabbed {plt.Count} records...");
             if (m_processRecord != null)
                 m_processRecord(plt, ShouldAbort);
@@ -38,12 +38,22 @@ namespace TCore.Pipeline
 
         public void Listen()
         {
-            while (!m_sld.IsDone())
+            m_sld.ThreadCountdown.AddCount();
+
+            try
             {
-                m_sld.WaitForEventSignal();
-                m_sld.SignalThreadWorking();
-                ProcessPendingRecords();
-                m_sld.SignalThreadWorkerComplete();
+                while (!m_sld.IsDone())
+                {
+                    m_sld.WaitForEventSignal();
+                    m_sld.SignalThreadWorking();
+                    ProcessPendingRecords();
+                    m_sld.SignalThreadWorkerComplete();
+                }
+            }
+            finally
+            {
+                // signal that we are complete
+                m_sld.ThreadCountdown.Signal();
             }
         }
     }

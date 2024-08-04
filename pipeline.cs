@@ -31,6 +31,8 @@ namespace TCore.Pipeline
         private readonly WriteHookDelegate m_hook;
         private readonly Dictionary<int, int> m_mapIndexToThreadId = new Dictionary<int, int>();
 
+        public CountdownEvent ThreadCountdown = new CountdownEvent(1);
+
         public SharedListenData(WriteHookDelegate hook, int threadCount)
         {
             m_threadCount = threadCount;
@@ -106,8 +108,12 @@ namespace TCore.Pipeline
                 m_fDone = true;
                 m_evt.Set();
             }
+            
+            // signal that we are done
+            ThreadCountdown.Signal();
+
             // outside the lock, wait for workers to finish
-            WaitHandle.WaitAll(m_evtThreadWorking);
+            ThreadCountdown.Wait();
         }
 
         public void WaitForEventSignal()
