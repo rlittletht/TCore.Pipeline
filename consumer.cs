@@ -25,6 +25,12 @@ namespace TCore.Pipeline
         {
             List<T> plt = m_sld.GrabListenRecords();
 
+            if (plt.Count == 0)
+            {
+                m_sld.HookLog($"nothing to grab...");
+                return;
+            }
+            
             m_sld.HookLog($"grabbed {plt.Count} records...");
             if (m_processRecord != null)
                 m_processRecord(plt, ShouldAbort);

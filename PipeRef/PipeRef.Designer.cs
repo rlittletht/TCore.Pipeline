@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label label2;
             this.m_cbxCost = new System.Windows.Forms.ComboBox();
             this.m_pbCreate = new System.Windows.Forms.Button();
             this.m_pbAdd1 = new System.Windows.Forms.Button();
@@ -36,13 +37,16 @@
             this.m_tbLog = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.m_allowQueueAbort = new System.Windows.Forms.CheckBox();
+            this.m_ebThreadCount = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
+            label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(596, 73);
+            label1.Location = new System.Drawing.Point(596, 181);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(141, 20);
@@ -52,6 +56,7 @@
             // 
             // m_cbxCost
             // 
+            this.m_cbxCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cbxCost.FormattingEnabled = true;
             this.m_cbxCost.Items.AddRange(new object[] {
             "None",
@@ -66,7 +71,7 @@
             "1 s",
             "5 s",
             "10 s"});
-            this.m_cbxCost.Location = new System.Drawing.Point(600, 98);
+            this.m_cbxCost.Location = new System.Drawing.Point(600, 206);
             this.m_cbxCost.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_cbxCost.Name = "m_cbxCost";
             this.m_cbxCost.Size = new System.Drawing.Size(180, 28);
@@ -76,7 +81,7 @@
             // m_pbCreate
             // 
             this.m_pbCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_pbCreate.Location = new System.Drawing.Point(600, 20);
+            this.m_pbCreate.Location = new System.Drawing.Point(600, 83);
             this.m_pbCreate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_pbCreate.Name = "m_pbCreate";
             this.m_pbCreate.Size = new System.Drawing.Size(175, 35);
@@ -87,8 +92,8 @@
             // 
             // m_pbAdd1
             // 
-            this.m_pbAdd1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_pbAdd1.Location = new System.Drawing.Point(600, 178);
+            this.m_pbAdd1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_pbAdd1.Location = new System.Drawing.Point(600, 286);
             this.m_pbAdd1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_pbAdd1.Name = "m_pbAdd1";
             this.m_pbAdd1.Size = new System.Drawing.Size(175, 35);
@@ -99,8 +104,8 @@
             // 
             // m_pbAdd5
             // 
-            this.m_pbAdd5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_pbAdd5.Location = new System.Drawing.Point(600, 223);
+            this.m_pbAdd5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_pbAdd5.Location = new System.Drawing.Point(600, 331);
             this.m_pbAdd5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_pbAdd5.Name = "m_pbAdd5";
             this.m_pbAdd5.Size = new System.Drawing.Size(175, 35);
@@ -136,19 +141,43 @@
             // 
             // m_allowQueueAbort
             // 
+            this.m_allowQueueAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_allowQueueAbort.AutoSize = true;
-            this.m_allowQueueAbort.Location = new System.Drawing.Point(600, 134);
+            this.m_allowQueueAbort.Location = new System.Drawing.Point(600, 242);
             this.m_allowQueueAbort.Name = "m_allowQueueAbort";
             this.m_allowQueueAbort.Size = new System.Drawing.Size(162, 24);
             this.m_allowQueueAbort.TabIndex = 7;
             this.m_allowQueueAbort.Text = "Allow queue abort";
             this.m_allowQueueAbort.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(596, 23);
+            label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(176, 20);
+            label2.TabIndex = 8;
+            label2.Tag = "";
+            label2.Text = "Consumer thread count";
+            // 
+            // m_ebThreadCount
+            // 
+            this.m_ebThreadCount.Location = new System.Drawing.Point(600, 46);
+            this.m_ebThreadCount.Name = "m_ebThreadCount";
+            this.m_ebThreadCount.Size = new System.Drawing.Size(172, 26);
+            this.m_ebThreadCount.TabIndex = 9;
+            this.m_ebThreadCount.Text = "1";
+            this.m_ebThreadCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // PipeRef
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(793, 515);
+            this.Controls.Add(this.m_ebThreadCount);
+            this.Controls.Add(label2);
             this.Controls.Add(this.m_allowQueueAbort);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.m_tbLog);
@@ -174,6 +203,7 @@
         private System.Windows.Forms.TextBox m_tbLog;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox m_allowQueueAbort;
+        private System.Windows.Forms.TextBox m_ebThreadCount;
     }
 }
 

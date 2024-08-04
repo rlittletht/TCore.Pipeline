@@ -19,6 +19,8 @@ using TCore.Pipeline;
 
 namespace PipeRef
 {
+    public delegate void LogDelegate(string logLine);
+
     public partial class PipeRef : Form
     {
         // A lot of the code in this is to show some practical uses as 
@@ -62,12 +64,16 @@ namespace PipeRef
             {
                 m_cbxCost.Items.Add(cost);
             }
+
+            Closing += ((sender, e) => TerminatePipeline());
         }
 
         private void DoCreatePipeline(object sender, EventArgs e)
         {
             Log($"{DateTime.Now}: Creating Pipeline");
-            pipeline = new ProducerConsumer<WorkItem>(null, ProcessWorkItems);
+            int threadCount = Math.Max(1, Int32.Parse(m_ebThreadCount.Text));
+
+            pipeline = new ProducerConsumer<WorkItem>(threadCount, null, ProcessWorkItems);
             pipeline.Start();
         }
 
@@ -98,16 +104,78 @@ namespace PipeRef
             m_msecCost = ((WorkCost)m_cbxCost.SelectedItem).WorkMsecCost;
         }
 
-        private void DoTerminatePipeline(object sender, EventArgs e)
+        private void TerminatePipeline()
         {
-            Log($"{DateTime.Now}: Requesting terminate...");
 
             ThreadPool.QueueUserWorkItem(
                 (_) =>
                 {
-                    pipeline.Stop();
+                    pipeline?.Stop();
                     Application.Exit();
                 });
+        }
+
+        private void DoTerminatePipeline(object sender, EventArgs e)
+        {
+            Log($"{DateTime.Now}: Requesting terminate...");
+            TerminatePipeline();
+        }
+
+        // This is the actual dispatch method that will be called whenever there is work waiting
+        // on the background thread. This will get an enumerable set of items.
+        // This is happening on the background thread as we pull item(s)
+        // off the queue
+        void ProcessWorkItems(IEnumerable<WorkItem> workItems, Consumer<WorkItem>.ShouldAbortDelegate shouldAbort)
+        {
+            Log($"[{Thread.CurrentThread.ManagedThreadId:x4}] {DateTime.Now}: Processing workItems");
+
+            foreach (WorkItem workItem in workItems)
+            {
+                if (workItem.AbortQueueSupported && shouldAbort())
+                {
+                    Log($"{DateTime.Now}: Abort requested, wait time {workItem.Elapsed()}");
+                    return;
+                }
+
+                Log($"{DateTime.Now}: Starting processing for {workItem.WorkId}, wait time {workItem.Elapsed()}");
+                if (workItem.Cost != 0)
+                    Thread.Sleep(workItem.Cost);
+                Log($"{DateTime.Now}: Completed processing for {workItem.WorkId}, wait time {workItem.Elapsed()}");
+            }
+        }
+
+        void LogCore(string s)
+        {
+            try
+            {
+                if (m_tbLog.TextLength > 0)
+                    m_tbLog.AppendText(Environment.NewLine);
+
+                m_tbLog.AppendText(s);
+            }
+            catch
+            {
+            }
+        }
+
+        void Log(string s)
+        {
+            try
+            {
+                s = $"[{Thread.CurrentThread.ManagedThreadId}]: {s}";
+
+                if (m_tbLog.InvokeRequired)
+                {
+                    m_tbLog.Invoke((Action)(() => { LogCore(s); }));
+                }
+                else
+                {
+                    LogCore(s);
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }
