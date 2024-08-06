@@ -72,26 +72,33 @@ namespace PipeRef
         {
             Log($"{DateTime.Now}: Creating Pipeline");
             int threadCount = Math.Max(1, Int32.Parse(m_ebThreadCount.Text));
-
-            pipeline = new ProducerConsumer<WorkItem>(threadCount, null, ProcessWorkItems);
+            int batchMax = Int32.Parse(m_ebMaxBatchSize.Text);
+            pipeline = new ProducerConsumer<WorkItem>(threadCount, ProcessWorkItems, batchMax);
             pipeline.Start();
         }
 
         private int m_workId = 0;
         private ProducerConsumer<WorkItem> pipeline;
 
+        Guid GetSelectedWorkCookie()
+        {
+            return m_workCookies[Int32.Parse((string)m_workCookie.SelectedItem)];;
+        }
+
         private void DoAdd1(object sender, EventArgs e)
         {
-            WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked);
+            Guid cookie = GetSelectedWorkCookie();
+            WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked, cookie);
             Log($"{DateTime.Now}: Adding WorkId({work.WorkId})");
             pipeline.Producer.QueueRecord(work);
         }
 
         private void DoAdd5(object sender, EventArgs e)
         {
+            Guid cookie = GetSelectedWorkCookie();
             for (int i = 0; i < 5; i++)
             {
-                WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked);
+                WorkItem work = new WorkItem(m_workId++, m_msecCost, m_allowQueueAbort.Checked, cookie);
                 Log($"{DateTime.Now}: Adding WorkId({work.WorkId})");
                 pipeline.Producer.QueueRecord(work);
             }
@@ -106,7 +113,6 @@ namespace PipeRef
 
         private void TerminatePipeline()
         {
-
             ThreadPool.QueueUserWorkItem(
                 (_) =>
                 {
@@ -176,6 +182,28 @@ namespace PipeRef
             catch
             {
             }
+        }
+
+        private Guid[] m_workCookies = new[]
+                                       {
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid(),
+                                           Guid.NewGuid()
+                                       };
+
+        private void DoAccelerate(object sender, EventArgs e)
+        {
+            Guid cookie = GetSelectedWorkCookie();
+
+            pipeline.Producer.Accelerate(cookie);
         }
     }
 }

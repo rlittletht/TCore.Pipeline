@@ -17,25 +17,27 @@ namespace PipeRef
     // (if you want to have any move semantics, then do that here. In this case,
     // we move the stopwatch from the given object)
     // You also have to provide a clean constructor.
-    class WorkItem : IPipelineBase<WorkItem>
+    class WorkItem : IPipelineWorkItemBase<WorkItem>
     {
         public int WorkId { get; set; }
         public int Cost { get; set; }
         public bool AbortQueueSupported { get; set; }
-
+        public Guid Cookie { get; }
         private Stopwatch m_sw;
 
         public WorkItem()
         {
+            Cookie = Guid.NewGuid();
         }
 
-        public WorkItem(int workId, int cost, bool abortQueueSupported)
+        public WorkItem(int workId, int cost, bool abortQueueSupported, Guid cookie)
         {
             WorkId = workId;
             Cost = cost;
             AbortQueueSupported = abortQueueSupported;
             m_sw = new Stopwatch();
             m_sw.Start();
+            Cookie = cookie;
         }
 
         public void InitFrom(WorkItem item)
